@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { store } from './store';
+import { connect } from 'react-redux';
 import { withdrawMoney } from './actions'
 import formatNumber from "format-number";
 import photographer from "./images/girl.png";
@@ -9,11 +9,11 @@ class App extends Component {
 
     dispatchBtnAction = e => {
         const amount = e.target.dataset.amount;
-        store.dispatch(withdrawMoney(amount))
+        this.props.withdrawMoney(amount);
     };
 
   render() {
-    const { totalAmount, username } = store.getState();
+    const { totalAmount, username } = this.props;
     return (
       <div className="App">
         <img className="App__userpic" src={photographer} alt="user" />
@@ -46,5 +46,13 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  totalAmount: state.totalAmount,
+  username: state.username
+});
 
-export default App;
+
+export default connect(
+  mapStateToProps,
+  { withdrawMoney }
+)(App);
